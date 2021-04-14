@@ -1,40 +1,60 @@
-import os
-import pandas as pd
 import time
 import schedule
 import speedtest
 from datetime import datetime
+from sqlalchemy import create_engine, MetaData, Table, Column, Numeric
 
 
-def check_internet(file="internet.xlsx"):
-    if not os.path.exists(file):
-        writer = pd.ExcelWriter(file)
-        pd.DataFrame({'Date': [], 'Time': [], 'Download': [], 'Upload': []}).to_excel(writer, 'base', index=False)
-        writer.save()
-        print("Excel file created!")
-    df = pd.read_excel(file)
-    s = speedtest.Speedtest()
-    current_date = datetime.now().strftime('%d/%m/%Y')
-    current_time = datetime.now().strftime('%H:%M')
-    download = s.download()
-    upload = s.upload()
-    df.loc[len(df)] = {'Date': current_date, 'Time': current_time, 'Download': download, 'Upload': upload}
-    print("Log: ", df.loc[len(df) - 1])
-    df.to_excel(
-        file,
-        sheet_name='base',
-        index=False
-    )
+# Creating database
+db_connect = create_engine('sqlite:///internet.db', echo=True)
+# Creating table
+meta = MetaData()
+students = Table(
+   'speed', meta,
+   Column('ts', Numeric, primary_key=True),
+   Column('download', Numeric),
+   Column('upload', Numeric),
+)
+meta.create_all(db_connect)
+
+
+def check_internet():
+    the_moment = datetime.utcnow()
+    ts = the_moment.timestamp()
+    log_time = the_moment.strftime('%d/%m/%Y %H:%M')
+    try:
+        s = speedtest.Speedtest()
+        download = s.download() / 1024 / 1024
+        upload = s.upload() / 1024 / 1024
+        conn = db_connect.connect()
+        conn.execute("INSERT INTO speed (ts,download,upload) VALUES ({},{},{})".format(
+            ts, download, upload))
+        print("Success: ",
+              log_time,
+              "|",
+              "(D)", download,
+              "(U)", upload,
+              "()", )
+    except Exception as e:
+        print("Error:", "(", log_time, ")", e)
 
 
 if __name__ == '__main__':
     # Task scheduling
     # After every 1 min is called.
-    schedule.every(1).minutes.do(check_internet)
+    print("Scheduling...")
+    schedule.every(0.2).minutes.do(check_internet)
+    print("done.")
+    # Creates the flask API
     # Loop so that the scheduling task
     # keeps on running all time.
-    while True:
-        # Checks whether a scheduled task
-        # is pending to run or not
-        schedule.run_pending()
-        time.sleep(1)
+    try:
+        while True:
+            # Checks whether a scheduled task
+            # is pending to run or not
+            schedule.run_pending()
+            time.sleep(0.2)
+    except KeyboardInterrupt:
+        print("Exit by pressing CTRL+C")
+    except Exception as err:
+        print(err)
