@@ -4,12 +4,13 @@ RUN mkdir -p /app/internet
 
 WORKDIR /app/internet
 
-COPY . .
+COPY requirements.txt .
+COPY api.py .
+COPY runner.py .
+COPY scripts/wrapper.sh start.sh
+
+RUN chmod +x start.sh
 
 RUN pip install -r requirements.txt
 
-RUN python check.py&
-
-ENTRYPOINT ["python"]
-
-CMD ["api.py"]
+CMD ["./start.sh"]

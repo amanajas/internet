@@ -6,7 +6,7 @@ from sqlalchemy import create_engine, MetaData, Table, Column, Numeric
 
 
 # Creating database
-db_connect = create_engine('sqlite:///internet.db', echo=True)
+db_connect = create_engine('sqlite:///internet.db')
 # Creating table
 meta = MetaData()
 students = Table(

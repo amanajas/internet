@@ -5,14 +5,24 @@ Checking internet from time to time and saving it in a database
 pip install -r requirements.txt
 ```
 ## run
+the first part in background
 ```
-python check.py
+python runner.py&
+```
+***AND*** the rest api
+```
 python api.py
 ```
+***OR***
+easily execute
+```
+./scripts/wrapper.sh
+```
+
 ## docker
 ```
-docker build -t internet:testing .
-docker run --rm -d -P -it internet:testing
+docker build -t speedtest .
+docker run --rm -d -p <port>:<port> -it speedtest
 ```
 ## api
 
