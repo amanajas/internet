@@ -22,7 +22,7 @@ easily execute
 ## docker
 ```
 docker build -t speedtest .
-docker run --rm -d -p <port>:<port> -it speedtest
+docker run --restart=always --rm -d -p <port>:<port> -it speedtest
 ```
 ## api
 
