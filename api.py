@@ -3,12 +3,15 @@ from datetime import datetime
 from flask import Flask
 from flask_restful import Api, request
 from sqlalchemy import create_engine
+from flask_cors import CORS
 
 # Database connection
 db_connect = None
 # Create Flask API objects
 app = Flask(__name__)
 api = Api(app)
+cors = CORS(app)
+
 
 # Get port
 port = int(os.environ.get("PORT", 5000))
