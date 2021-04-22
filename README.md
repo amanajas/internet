@@ -1,6 +1,17 @@
 # Internet
 Checking internet from time to time and saving it in a database
-## install
+
+## docker images
+For *desktop devices*
+```
+docker pull amanajas/speedtest
+```
+For *arm* devices*
+```
+docker pull amanajas/arm-speedtest
+```
+
+## install local
 ```
 pip install -r requirements.txt
 ```
