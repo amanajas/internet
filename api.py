@@ -49,7 +49,7 @@ def date(from_date):
     return {"speed": values}
 
 
-@app.route('/speed/<from_date>,<to_date>', methods=['GET'])
+@app.route('/speed/<from_date>/<to_date>', methods=['GET'])
 def date(from_date):
     if not isinstance(from_date, str):
         return {"error": "From date is not valid"}
