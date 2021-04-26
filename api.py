@@ -49,8 +49,8 @@ def date(from_date):
     return {"speed": values}
 
 
-@app.route('/speed/<from_date>/<to_date>', methods=['GET'])
-def date(from_date):
+@app.route('/speed/<from_date>,<to_date>', methods=['GET'])
+def date_between(from_date):
     if not isinstance(from_date, str):
         return {"error": "From date is not valid"}
     if not isinstance(from_date, str):
