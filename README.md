@@ -8,7 +8,7 @@ docker pull amanajas/speedtest
 ```
 For *arm* devices*
 ```
-docker pull amanajas/arm-speedtest
+docker pull amanajas/speedtest:arm
 ```
 
 ## install local
