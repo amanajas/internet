@@ -49,6 +49,25 @@ def date(from_date):
     return {"speed": values}
 
 
+@app.route('/speed/<from_date>,<to_date>', methods=['GET'])
+def date(from_date):
+    if not isinstance(from_date, str):
+        return {"error": "From date is not valid"}
+    if not isinstance(from_date, str):
+        return {"error": "To date is not valid"}
+    try:
+        from_ts = datetime.strptime(from_date, '%d.%m.%Y')
+        to_ts = datetime.strptime(from_date, '%d.%m.%Y')
+    except ValueError:
+        return {"error": "Incorrect data format, should be DD.MM.YYYY"}
+    sql = "select * from speed where datetime(ts,'unixepoch') BETWEEN '{} 00:00:00' AND '{} 23:59:59'".format(
+        from_ts.date(), to_ts.date())
+    conn = db_connect.connect()
+    query = conn.execute(sql)
+    values = [{"ts": t[0], "download": t[1], "upload": t[2]} for t in query.cursor.fetchall()]
+    return {"speed": values}
+
+
 @app.route('/speed/add', methods=['POST'])
 def add():
     ts = request.args.get('ts', type=float)

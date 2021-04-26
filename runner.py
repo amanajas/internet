@@ -43,7 +43,7 @@ if __name__ == '__main__':
     # Task scheduling
     # After every 1 min is called.
     print("Scheduling...")
-    schedule.every(0.2).minutes.do(check_internet)
+    schedule.every(1).minutes.do(check_internet)
     print("done.")
     # Creates the flask API
     # Loop so that the scheduling task
@@ -53,7 +53,7 @@ if __name__ == '__main__':
             # Checks whether a scheduled task
             # is pending to run or not
             schedule.run_pending()
-            time.sleep(0.2)
+            time.sleep(1)
     except KeyboardInterrupt:
         print("Exit by pressing CTRL+C")
     except Exception as err:
